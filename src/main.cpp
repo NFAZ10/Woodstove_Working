@@ -124,7 +124,8 @@ Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(CSPin, DIPin, DOPin, CLKPin);
 
 
 void setup() {
-  // put your setup code here, to run once:
+Serial.begin(115200);
+Serial.println("Wood Stove Boot");
  
 }
 
