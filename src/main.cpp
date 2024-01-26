@@ -23,12 +23,54 @@
 #include <ESPAsyncWebServer.h>
 #include <WiFiClientSecure.h>
 
-#include "functions.h"
+//#include "functions.h"
 #include "bitmap.h"
 
 
+
+
+RTC_DATA_ATTR bool isVariableTrue = true; // Initial value
+
+unsigned long previousMillis = 0; // will store last time LED was updated
+unsigned long previousMillis_2 = 0;
+const long interval = 60000;
+const long mini_interval = 1000;
+
+
+///DEFINES///
+//NEOPIXEL
+#define PIN 0
+#define NUMPIXELS 4
+
+///MAX1704X
+#define I2C_SDA 19
+#define I2C_SCL 22
+
+///MAX41856
+#define CSPin 25
+#define DIPin 26
+#define DOPin 27
+#define CLKPin 14
+#define DRDY_PIN 32
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+float highTemp = 25.0; // Default high temperature
+float lowTemp = 20.0;  // Default low temperature
+
+int Ftemp = 001;
+int wifitimer = 0;
+int mqtttimer = 0;
+float BatteryV=100;
+
+float previousTemperature = -100.0;
+float stovetemp;
+float temperature = 0;
+
+
+
 String FirmwareVer = {
-  "2.2"
+  "2.0"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/d9ef837da552db21a9a458f7d39669f0ae07124f/src/fw.txt"
@@ -75,120 +117,13 @@ int FirmwareVersionCheck();
 void repeatedCall();
 
 
-
-RTC_DATA_ATTR bool isVariableTrue = true; // Initial value
-
-unsigned long previousMillis = 0; // will store last time LED was updated
-unsigned long previousMillis_2 = 0;
-const long interval = 60000;
-const long mini_interval = 1000;
-
- #include <Arduino.h>
-
-void drawIPADDRESS()
-{
-  //Serial.println("drawHelloWorld");
-  display.setRotation(1);
-  display.setFont(&FreeMonoBold12pt7b);
-  display.setTextColor(GxEPD_BLACK);
-  display.fillScreen(GxEPD_WHITE);
-  display.setCursor(64, 64);
-  display.println("IP ADDRESS is");
-  
-  //Serial.println("drawHelloWorld done");
-}
-
-void showPartialUpdate(int Ftemp)
-{
-  
-  uint16_t box_x = 0;
-  uint16_t box_y = 0;
-  uint16_t box_w = 296;
-  uint16_t box_h = 110;
-  uint16_t cursor_y = box_y + box_h - 6;
-  float value = 13.95;
-  display.setFont(&FreeSansBold24pt7b);
-  display.setTextColor(GxEPD_WHITE);
-  display.setRotation(45);
-  display.setTextSize(3);
-  // draw background
-  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_BLACK);
-  display.setCursor(20,100);//leftright,updown
-  display.print(Ftemp);
-  display.updateWindow(box_x, box_y, box_w, box_h, true);
-  delay(2000);
+Adafruit_MAX17048 maxlipo;
 
 
-}
-void showPartialUpdateVOL(int BV)
-{
-  
-  uint16_t box_x = 0;
-  uint16_t box_y = 108;
-  uint16_t box_w = 100;
-  uint16_t box_h = 20;
-  uint16_t cursor_y = box_y + box_h - 6;
-  float value = 13.95;
-  display.setFont(&FreeMonoBold12pt7b);
-  display.setTextColor(GxEPD_BLACK);
-  display.setRotation(45);
-  display.setTextSize(1);
-  // draw background
-  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-  display.setCursor(20,125);//leftright,updown
-  display.print(BV);
-  display.updateWindow(box_x, box_y, box_w, box_h, true);
-  delay(2000);
+#define DRDY_PIN 32
+Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(CSPin, DIPin, DOPin, CLKPin);
 
 
-}
-
-
-void showPartialUpdateWIFION()
-{
-  
-  uint16_t box_x = 90;
-  uint16_t box_y = 108;
-  uint16_t box_w = 175;
-  uint16_t box_h = 20;
-  uint16_t cursor_y = box_y + box_h - 6;
-  float value = 13.95;
-  display.setFont(&FreeMonoBold12pt7b);
-  display.setTextColor(GxEPD_BLACK);
-  display.setRotation(45);
-  display.setTextSize(1);
-  // draw background
-  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-  display.setCursor(90,125);//leftright,updown
-  display.print("WIFI CONNECTING");
-  display.updateWindow(box_x, box_y, box_w, box_h, true);
-  delay(2000);
-
-
-}
-
-void showPartialUpdateWIFIFAIL()
-{
-  
-  uint16_t box_x = 90;
-  uint16_t box_y = 108;
-  uint16_t box_w = 175;
-  uint16_t box_h = 20;
-  uint16_t cursor_y = box_y + box_h - 6;
-  float value = 13.95;
-  display.setFont(&FreeMonoBold12pt7b);
-  display.setTextColor(GxEPD_BLACK);
-  display.setRotation(45);
-  display.setTextSize(1);
-  // draw background
-  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
-  display.setCursor(100,125);//leftright,updown
-  display.print("WIFI FAILED");
-  display.updateWindow(box_x, box_y, box_w, box_h, true);
-  delay(2000);
-
-
-}
 
 float readTemperature() {
 
@@ -203,58 +138,10 @@ float getBatteryPercentage() {
 }
 
 
-void setLED(int r,int b, int g){
-  pixels.setPixelColor(0, pixels.Color(r, g, b));
-  pixels.setPixelColor(1, pixels.Color(r, g, b));
-  pixels.setPixelColor(2, pixels.Color(r, g, b));
-  pixels.setPixelColor(3, pixels.Color(r, g, b));
-  pixels.show();
-}
 
-void checkTemp(int high,int low,int temp){
 
-if(high>=temp){
-  Serial.println("TEMP OVER LIMIT!!!");
-  setLED(255,0,0);
-}
-if(low<=temp){
-  Serial.println("ADD WOOD OR OPEN AIR");
-  setLED(0,0,255);
 
-}
-}
 
-///DEFINES///
-//NEOPIXEL
-#define PIN 0
-#define NUMPIXELS 4
-
-///MAX1704X
-#define I2C_SDA 19
-#define I2C_SCL 22
-
-///MAX41856
-#define CSPin 25
-#define DIPin 26
-#define DOPin 27
-#define CLKPin 14
-#define DRDY_PIN 32
-
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-
-float highTemp = 25.0; // Default high temperature
-float lowTemp = 20.0;  // Default low temperature
-
-int Ftemp = 001;
-int wifitimer = 0;
-int mqtttimer = 0;
-float BatteryV=100;
-
-float previousTemperature = -100.0;
-float stovetemp;
-float temperature = 0;
-
-Adafruit_MAX17048 maxlipo;
 
 
 
@@ -264,9 +151,6 @@ AsyncWebServer server(80);
 GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
 GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
 
-//Use software SPI: CS, DI, DO, CLK
-#define DRDY_PIN 32
-Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(CSPin, DIPin, DOPin, CLKPin);
 
 
 
@@ -315,7 +199,7 @@ Serial.println(BatteryV);
 
  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP    
  Serial.println("WIFI ENABLED");
- showPartialUpdateWIFION();
+ //showPartialUpdateWIFION();
 
     //wm.resetSettings();  //FORTESTING
 
@@ -329,7 +213,7 @@ Serial.println(BatteryV);
     }
     else {
         Serial.println("Configportal running");
-        showPartialUpdateWIFIFAIL();
+        //showPartialUpdateWIFIFAIL();
     }
 
 
@@ -447,7 +331,7 @@ delay(100);
 void loop() {
 
 
- repeatedCall();
+FirmwareVersionCheck();
 
 
 
