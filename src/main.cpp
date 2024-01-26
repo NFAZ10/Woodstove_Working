@@ -255,7 +255,7 @@ Serial.begin(115200);
   ///////////////LIPO//////////////////////
  if (!maxlipo.begin()) {
     Serial.println(F("Couldnt find Adafruit MAX17048?\nMake sure a battery is plugged in!"));
-    while (1) delay(10);
+    
   }
 
 BatteryV = (maxlipo.cellPercent());
