@@ -70,7 +70,7 @@ float temperature = 0;
 
 
 String FirmwareVer = {
-  "2.0"
+  "1.0"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/d9ef837da552db21a9a458f7d39669f0ae07124f/src/fw.txt"
@@ -403,9 +403,9 @@ void loop() {
 
 FirmwareVersionCheck();
 
-delay(60000);
+delay(1000);
 //wm.process();
-  firmwareUpdate();
+  
      // Send the updated pixel colors to the hardware.
 
   Serial.print(F("Batt Voltage: ")); Serial.print(maxlipo.cellVoltage(), 3); Serial.println(" V");
