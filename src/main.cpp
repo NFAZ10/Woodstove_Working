@@ -106,6 +106,9 @@ const char * rootCACertificate = \
 
 
 
+GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
+GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
+
 
 
 
@@ -135,8 +138,78 @@ int Ftemp = ((maxthermo.readThermocoupleTemperature()*1.8)+32);
 float getBatteryPercentage() {
 
   return maxlipo.cellPercent();
+
 }
 
+void setLED(int r,int b, int g){
+  pixels.setPixelColor(0, pixels.Color(r, g, b));
+  pixels.setPixelColor(1, pixels.Color(r, g, b));
+  pixels.setPixelColor(2, pixels.Color(r, g, b));
+  pixels.setPixelColor(3, pixels.Color(r, g, b));
+  pixels.show();
+}
+
+
+void checkTemp(int high,int low,int temp){
+
+if(high>=temp){
+  Serial.println("TEMP OVER LIMIT!!!");
+  setLED(255,0,0);
+}
+if(low<=temp){
+  Serial.println("ADD WOOD OR OPEN AIR");
+  setLED(0,0,255);
+
+}
+}
+
+
+
+void showPartialUpdate(int Ftemp)
+{
+  
+  uint16_t box_x = 0;
+  uint16_t box_y = 0;
+  uint16_t box_w = 296;
+  uint16_t box_h = 110;
+  uint16_t cursor_y = box_y + box_h - 6;
+  float value = 13.95;
+  display.setFont(&FreeSansBold24pt7b);
+  display.setTextColor(GxEPD_WHITE);
+  display.setRotation(45);
+  display.setTextSize(3);
+  // draw background
+  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_BLACK);
+  display.setCursor(20,100);//leftright,updown
+  display.print(Ftemp);
+  display.updateWindow(box_x, box_y, box_w, box_h, true);
+  delay(2000);
+
+
+}
+
+void showPartialUpdateVOL(int BV)
+{
+  
+  uint16_t box_x = 0;
+  uint16_t box_y = 108;
+  uint16_t box_w = 100;
+  uint16_t box_h = 20;
+  uint16_t cursor_y = box_y + box_h - 6;
+  float value = 13.95;
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.setRotation(45);
+  display.setTextSize(1);
+  // draw background
+  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+  display.setCursor(20,125);//leftright,updown
+  display.print(BV);
+  display.updateWindow(box_x, box_y, box_w, box_h, true);
+  delay(2000);
+
+
+}
 
 
 
@@ -147,9 +220,6 @@ float getBatteryPercentage() {
 
 AsyncWebServer server(80);
 
-
-GxIO_Class io(SPI, /*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16); // arbitrary selection of 17, 16
-GxEPD_Class display(io, /*RST=*/ 16, /*BUSY=*/ 4); // arbitrary selection of (16), 4
 
 
 
@@ -332,6 +402,66 @@ void loop() {
 
 
 FirmwareVersionCheck();
+
+delay(60000);
+//wm.process();
+  firmwareUpdate();
+     // Send the updated pixel colors to the hardware.
+
+  Serial.print(F("Batt Voltage: ")); Serial.print(maxlipo.cellVoltage(), 3); Serial.println(" V");
+  Serial.print(F("Batt Percent: ")); Serial.print(maxlipo.cellPercent(), 1); Serial.println(" %");
+
+
+  int BV = maxlipo.cellPercent();
+
+
+  Serial.println(BV);
+  showPartialUpdateVOL(BV);
+
+
+
+
+
+    previousTemperature = temperature;
+  delay(1000);
+  
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+  int count = 0;
+
+  while (digitalRead(DRDY_PIN)) {
+    if (count++ > 200) {
+      count = 0;
+      Serial.print(".");
+    }
+  }
+  
+  previousTemperature = temperature;
+  //temperature = maxthermo.readThermocoupleTemperature();
+
+  temperature++;
+  if(temperature==999){temperature=0;}
+
+  Ftemp = ((temperature*1.8)+32);
+   
+   Serial.print("TEMP:");Serial.println(Ftemp);
+  // showPartialUpdate(Ftemp);
+ Serial.print("High Temp: ");Serial.println(highTemp);
+ Serial.print("Low Temp:  ");Serial.println(lowTemp);
+  if(previousTemperature!=temperature)
+  {
+
+showPartialUpdate(Ftemp);
+
+// Publish temperature to MQTT
+    
+    Serial.print(maxthermo.readThermocoupleTemperature());
+    Serial.print("C");Serial.print(Ftemp);Serial.println("F");
+    Serial.print(F("(Dis)Charge rate : ")); Serial.print(maxlipo.chargeRate(), 1); Serial.println(" %/hr");
+  }
+
+checkTemp(highTemp,lowTemp,Ftemp);
+
 
 
 
