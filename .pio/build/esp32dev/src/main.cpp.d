@@ -289,4 +289,5 @@
  .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/WebHandlerImpl.h \
  .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncWebSocket.h \
  .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncWebSynchronization.h \
- .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncEventSource.h
+ .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncEventSource.h \
+ src/functions.h src/bitmap.h

@@ -23,13 +23,16 @@
 #include <ESPAsyncWebServer.h>
 #include <WiFiClientSecure.h>
 
+#include "functions.h"
+#include "bitmap.h"
+
 
 String FirmwareVer = {
   "2.2"
 };
 
-#define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove/77e7df8ad037257b2ab9f3ceeef6b47795e8e9df/firmware.txt"
-#define URL_fw_Bin "https://raw.githubusercontent.com/NFAZ10/Woodstove/77e7df8ad037257b2ab9f3ceeef6b47795e8e9df/firmware.bin"
+#define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/d9ef837da552db21a9a458f7d39669f0ae07124f/src/fw.txt"
+#define URL_fw_Bin "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/d9ef837da552db21a9a458f7d39669f0ae07124f/.pio/build/esp32dev/firmware.bin"
 
 //DigiCert root certificate has expiry date of 10 Nov 2031
 const char * rootCACertificate = \
@@ -71,11 +74,155 @@ void firmwareUpdate();
 int FirmwareVersionCheck();
 void repeatedCall();
 
+
+
+RTC_DATA_ATTR bool isVariableTrue = true; // Initial value
+
 unsigned long previousMillis = 0; // will store last time LED was updated
 unsigned long previousMillis_2 = 0;
 const long interval = 60000;
 const long mini_interval = 1000;
 
+ #include <Arduino.h>
+
+void drawIPADDRESS()
+{
+  //Serial.println("drawHelloWorld");
+  display.setRotation(1);
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(64, 64);
+  display.println("IP ADDRESS is");
+  
+  //Serial.println("drawHelloWorld done");
+}
+
+void showPartialUpdate(int Ftemp)
+{
+  
+  uint16_t box_x = 0;
+  uint16_t box_y = 0;
+  uint16_t box_w = 296;
+  uint16_t box_h = 110;
+  uint16_t cursor_y = box_y + box_h - 6;
+  float value = 13.95;
+  display.setFont(&FreeSansBold24pt7b);
+  display.setTextColor(GxEPD_WHITE);
+  display.setRotation(45);
+  display.setTextSize(3);
+  // draw background
+  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_BLACK);
+  display.setCursor(20,100);//leftright,updown
+  display.print(Ftemp);
+  display.updateWindow(box_x, box_y, box_w, box_h, true);
+  delay(2000);
+
+
+}
+void showPartialUpdateVOL(int BV)
+{
+  
+  uint16_t box_x = 0;
+  uint16_t box_y = 108;
+  uint16_t box_w = 100;
+  uint16_t box_h = 20;
+  uint16_t cursor_y = box_y + box_h - 6;
+  float value = 13.95;
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.setRotation(45);
+  display.setTextSize(1);
+  // draw background
+  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+  display.setCursor(20,125);//leftright,updown
+  display.print(BV);
+  display.updateWindow(box_x, box_y, box_w, box_h, true);
+  delay(2000);
+
+
+}
+
+
+void showPartialUpdateWIFION()
+{
+  
+  uint16_t box_x = 90;
+  uint16_t box_y = 108;
+  uint16_t box_w = 175;
+  uint16_t box_h = 20;
+  uint16_t cursor_y = box_y + box_h - 6;
+  float value = 13.95;
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.setRotation(45);
+  display.setTextSize(1);
+  // draw background
+  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+  display.setCursor(90,125);//leftright,updown
+  display.print("WIFI CONNECTING");
+  display.updateWindow(box_x, box_y, box_w, box_h, true);
+  delay(2000);
+
+
+}
+
+void showPartialUpdateWIFIFAIL()
+{
+  
+  uint16_t box_x = 90;
+  uint16_t box_y = 108;
+  uint16_t box_w = 175;
+  uint16_t box_h = 20;
+  uint16_t cursor_y = box_y + box_h - 6;
+  float value = 13.95;
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.setRotation(45);
+  display.setTextSize(1);
+  // draw background
+  display.fillRect(box_x, box_y, box_w, box_h, GxEPD_WHITE);
+  display.setCursor(100,125);//leftright,updown
+  display.print("WIFI FAILED");
+  display.updateWindow(box_x, box_y, box_w, box_h, true);
+  delay(2000);
+
+
+}
+
+float readTemperature() {
+
+int Ftemp = ((maxthermo.readThermocoupleTemperature()*1.8)+32);
+  return Ftemp;
+
+}
+
+float getBatteryPercentage() {
+
+  return maxlipo.cellPercent();
+}
+
+
+void setLED(int r,int b, int g){
+  pixels.setPixelColor(0, pixels.Color(r, g, b));
+  pixels.setPixelColor(1, pixels.Color(r, g, b));
+  pixels.setPixelColor(2, pixels.Color(r, g, b));
+  pixels.setPixelColor(3, pixels.Color(r, g, b));
+  pixels.show();
+}
+
+void checkTemp(int high,int low,int temp){
+
+if(high>=temp){
+  Serial.println("TEMP OVER LIMIT!!!");
+  setLED(255,0,0);
+}
+if(low<=temp){
+  Serial.println("ADD WOOD OR OPEN AIR");
+  setLED(0,0,255);
+
+}
+}
 
 ///DEFINES///
 //NEOPIXEL
@@ -124,13 +271,188 @@ Adafruit_MAX31856 maxthermo = Adafruit_MAX31856(CSPin, DIPin, DOPin, CLKPin);
 
 
 void setup() {
+
 Serial.begin(115200);
-Serial.println("Wood Stove Boot");
- 
+  Serial.println("WoodStove...V2.0");
+  display.init(); // enable diagnostic output on Serial
+
+  pixels.begin();
+  
+  display.setRotation(1);
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(20, 64);
+  display.print("WIFI SETUP");
+  display.update();
+  delay(2000);
+  display.fillScreen(GxEPD_WHITE);
+  display.update();
+
+  display.drawBitmap(epd_bitmap_Boot_screen,0,0, 296, 128,GxEPD_WHITE);
+  display.update();
+  delay(5000);
+  display.fillScreen(GxEPD_WHITE);
+  display.update();
+
+  
+  Wire.begin(I2C_SDA, I2C_SCL);
+
+  ///////////////LIPO//////////////////////
+ if (!maxlipo.begin()) {
+    Serial.println(F("Couldnt find Adafruit MAX17048?\nMake sure a battery is plugged in!"));
+    while (1) delay(10);
+  }
+
+BatteryV = (maxlipo.cellPercent());
+Serial.println(BatteryV);
+
+
+///////////////WIFI MANAGER/////////////////////
+
+ WiFiManager wm;
+ //wiFiManager.autoConnect("CustomAP");
+
+ WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP    
+ Serial.println("WIFI ENABLED");
+ showPartialUpdateWIFION();
+
+    //wm.resetSettings();  //FORTESTING
+
+
+    wm.setConfigPortalBlocking(true);
+    wm.setConfigPortalTimeout(120);
+    //automatically connect using saved credentials if they exist
+    //If connection fails it starts an access point with the specified name
+    if(wm.autoConnect("AutoConnectAP")){
+        Serial.println("connected...yeey :)");
+    }
+    else {
+        Serial.println("Configportal running");
+        showPartialUpdateWIFIFAIL();
+    }
+
+
+
+
+
+
+
+
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+  
+////////////DISPLAY IP///////////////////
+  display.setRotation(1);
+  display.setFont(&FreeMonoBold12pt7b);
+  display.setTextColor(GxEPD_BLACK);
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(20, 64);
+  display.print("IP ADDRESS is");
+  display.setCursor(40, 80);
+  display.print(WiFi.localIP());
+  display.update();
+
+
+   delay(10000);
+////////////////TEMP SENSOR//////////////
+
+   boolean METRIC = false;  
+
+  Serial.println("MAX31856 thermocouple test");
+
+  pinMode(DRDY_PIN, INPUT);
+
+  if (!maxthermo.begin()) {
+    Serial.println("Could not initialize thermocouple.");
+    while (1) delay(10);
+  }
+
+  maxthermo.setThermocoupleType(MAX31856_TCTYPE_K);
+  maxthermo.setConversionMode(MAX31856_CONTINUOUS);
+
+
+  ////////////
+  Serial.print("Wi-Fi Status: ");
+  Serial.println(WiFi.status());
+
+  Serial.println("setup done");
+
+
+  display.fillScreen(GxEPD_WHITE);
+  display.update();
+
+delay(100);
+   // Serve web page
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    String html = "<html><body>";
+    html += "<h1>Temperature Monitoring</h1>";
+    html += "<p>High Temperature: <input type='number' step='0.1' value='" + String(highTemp) + "' id='highTemp'></p>";
+    html += "<p>Low Temperature: <input type='number' step='0.1' value='" + String(lowTemp) + "' id='lowTemp'></p>";
+    html += "<p>Current Temperature: " + String(readTemperature()) + " &#8451;</p>";
+    html += "<p>Battery Percentage: " + String(getBatteryPercentage()) + "%</p>";
+    html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
+    html += "<p>Variable Status: " + String(isVariableTrue ? "True" : "False") + "</p>";
+    html += "<button onclick='updateSettings()'>Update Settings</button>";
+    html += "<button onclick='toggleVariable()'>Reboot</button>";
+    html += "<button onclick='resetWiFiManager()'>Reset WiFi</button>";
+    html += "<script>function updateSettings() {"
+            "var highTemp = document.getElementById('highTemp').value;"
+            "var lowTemp = document.getElementById('lowTemp').value;"
+            "fetch('/update?highTemp=' + highTemp + '&lowTemp=' + lowTemp);"
+            "}"
+            "function toggleVariable() {"
+            "fetch('/toggle');"
+            "}"
+            "function resetWiFiManager() {"
+            "fetch('/resetWiFiManager');"
+            "}</script>";
+    html += "</body></html>";
+    request->send(200, "text/html", html);
+  });
+
+  // Endpoint to update settings
+  server.on("/update", HTTP_GET, [](AsyncWebServerRequest *request){
+    if(request->hasParam("highTemp") && request->hasParam("lowTemp")){
+      highTemp = request->getParam("highTemp")->value().toFloat();
+      lowTemp = request->getParam("lowTemp")->value().toFloat();
+    }
+    request->send(200, "text/plain", "Settings Updated");
+  });
+
+  // Endpoint to toggle boolean variable and restart
+  server.on("/toggle", HTTP_GET, [](AsyncWebServerRequest *request){
+    isVariableTrue = !isVariableTrue;
+    ESP.restart(); // Reboot the ESP32
+    request->send(200, "text/plain", "Variable Toggled and ESP32 Restarted");
+  });
+
+  // Endpoint to reset WiFiManager
+  server.on("/resetWiFiManager", HTTP_GET, [](AsyncWebServerRequest *request){
+    WiFiManager wifiManager;
+    wifiManager.resetSettings(); // Erase WiFiManager stored credentials
+    ESP.restart(); // Reboot the ESP32
+    request->send(200, "text/plain", "WiFiManager Reset and ESP32 Restarted");
+  });
+
+  // Serve image file
+  //server.serveStatic("/image.jpg", U_SPIFFS, "/image.jpg"); // Replace 'image.jpg' with your image file
+
+  server.begin();
+  
+
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
+
+ repeatedCall();
+
+
+
+
+
 }
 
 
