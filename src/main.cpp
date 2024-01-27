@@ -70,7 +70,7 @@ float temperature = 0;
 
 
 String FirmwareVer = {
-  "1.0"
+  "1.1"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -344,7 +344,7 @@ delay(100);
     html += "<p>Low Temperature: <input type='number' step='0.1' value='" + String(lowTemp) + "' id='lowTemp'></p>";
     html += "<p>Current Temperature: " + String(readTemperature()) + " &#8451;</p>";
     html += "<p>Battery Percentage: " + String(getBatteryPercentage()) + "%</p>";
-    html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
+   // html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
     html += "<p>Variable Status: " + String(isVariableTrue ? "True" : "False") + "</p>";
     html += "<button onclick='updateSettings()'>Update Settings</button>";
     html += "<button onclick='toggleVariable()'>Reboot</button>";
