@@ -71,7 +71,7 @@ float temperature = 0;
 
 
 String FirmwareVer = {
-  "1.1"
+  "1.1.1"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -278,7 +278,7 @@ Serial.println(BatteryV);
     wm.setConfigPortalTimeout(120);
     //automatically connect using saved credentials if they exist
     //If connection fails it starts an access point with the specified name
-    if(wm.autoConnect("AutoConnectAP")){
+    if(wm.autoConnect("Woodstogesetup")){
         Serial.println("connected...yeey :)");
     }
     else {
