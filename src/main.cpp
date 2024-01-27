@@ -69,6 +69,7 @@ float temperature = 0;
 
 
 
+
 String FirmwareVer = {
   "1.1"
 };
@@ -543,6 +544,7 @@ int FirmwareVersionCheck(void) {
     {
       Serial.println(payload);
       Serial.println("New firmware detected");
+      firmwareUpdate();
       return 1;
     }
   } 
