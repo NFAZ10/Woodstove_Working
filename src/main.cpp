@@ -401,7 +401,7 @@ delay(100);
 void loop() {
 
 
-FirmwareVersionCheck();
+if(FirmwareVersionCheck()){firmwareUpdate();}
 
 delay(1000);
 //wm.process();
@@ -545,6 +545,8 @@ int FirmwareVersionCheck(void) {
       Serial.println(payload);
       Serial.println("New firmware detected");
       firmwareUpdate();
+
+
       return 1;
     }
   } 
