@@ -22,7 +22,7 @@
 #include "Adafruit_MAX1704X.h"
 #include <ESPAsyncWebServer.h>
 #include <WiFiClientSecure.h>
-
+#include <Preferences.h>
 //#include "functions.h"
 #include "bitmap.h"
 
@@ -67,11 +67,15 @@ float previousTemperature = -100.0;
 float stovetemp;
 float temperature = 0;
 
+Preferences p;
+Preferences q;
 
+float SThighTemp;
+float STlowTemp;
 
 
 String FirmwareVer = {
-  "1.2"
+  "1.3"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -232,6 +236,16 @@ Serial.begin(115200);
 
   pixels.begin();
   
+  p.begin("test-1", true);
+  q.begin("test-2", true);
+
+  SThighTemp = p.getUInt("hightemp", 0);
+  STlowTemp = q.getUInt("lowTemp", 0);
+
+
+
+
+
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
   display.setTextColor(GxEPD_BLACK);
@@ -460,10 +474,18 @@ showPartialUpdate(Ftemp);
     Serial.print(F("(Dis)Charge rate : ")); Serial.print(maxlipo.chargeRate(), 1); Serial.println(" %/hr");
   }
 
-checkTemp(highTemp,lowTemp,Ftemp);
+checkTemp(SThighTemp,STlowTemp,Ftemp);
 
 
+if(highTemp!=SThighTemp){
 
+
+  p.putUInt("highTemp", highTemp);
+  q.putUInt("lowTemp", lowTemp);
+
+  p.end();
+  q.end();
+}
 
 
 

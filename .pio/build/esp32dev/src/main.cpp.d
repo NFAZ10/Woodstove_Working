@@ -290,4 +290,5 @@
  .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncWebSocket.h \
  .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncWebSynchronization.h \
  .pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src/AsyncEventSource.h \
+ /home/nfaz/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src/Preferences.h \
  src/bitmap.h
