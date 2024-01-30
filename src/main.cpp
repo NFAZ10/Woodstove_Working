@@ -43,7 +43,7 @@ const long mini_interval = 1000;
 #define NUMPIXELS 4
 
 ///MAX1704X
-#define I2C_SDA 19
+#define I2C_SDA 21
 #define I2C_SCL 22
 
 ///MAX41856
