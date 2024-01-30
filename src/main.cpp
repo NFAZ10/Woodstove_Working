@@ -74,7 +74,7 @@ float STlowTemp;
 
 
 String FirmwareVer = {
-  "1.5"
+  "1.1"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -266,13 +266,13 @@ Serial.begin(115200);
   //Wire.begin(I2C_SDA, I2C_SCL);
 
   ///////////////LIPO//////////////////////
- if (!maxlipo.begin()) {
+if (!maxlipo.begin()) {
     Serial.println(F("Couldnt find Adafruit MAX17048?\nMake sure a battery is plugged in!"));
-
+    while (1) delay(10);
   }
-
-//BatteryV = 0;//(maxlipo.cellPercent());
-Serial.println(BatteryV);
+  Serial.print(F("Found MAX17048"));
+  Serial.print(F(" with Chip ID: 0x")); 
+  Serial.println(maxlipo.getChipID(), HEX);
 
 
 ///////////////WIFI MANAGER/////////////////////
