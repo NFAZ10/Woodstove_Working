@@ -74,7 +74,7 @@ float STlowTemp;
 
 
 String FirmwareVer = {
-  "1.4"
+  "1.5"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
