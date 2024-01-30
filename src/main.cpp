@@ -54,7 +54,6 @@ const long mini_interval = 1000;
 #define DRDY_PIN 32
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-
 float highTemp = 25.0; // Default high temperature
 float lowTemp = 20.0;  // Default low temperature
 
@@ -75,7 +74,7 @@ float STlowTemp;
 
 
 String FirmwareVer = {
-  "1.3"
+  "1.4"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -272,7 +271,7 @@ Serial.begin(115200);
 
   }
 
-BatteryV = 0;//(maxlipo.cellPercent());
+//BatteryV = 0;//(maxlipo.cellPercent());
 Serial.println(BatteryV);
 
 
