@@ -263,7 +263,7 @@ Serial.begin(115200);
   display.update();
 
   
-  Wire.begin(I2C_SDA, I2C_SCL);
+  //Wire.begin(I2C_SDA, I2C_SCL);
 
   ///////////////LIPO//////////////////////
  if (!maxlipo.begin()) {
