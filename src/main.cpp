@@ -123,7 +123,6 @@ int FirmwareVersionCheck();
 void repeatedCall();
 
 
-Adafruit_MAX17048 maxlipo;
 
 
 #define DRDY_PIN 32
@@ -138,11 +137,7 @@ int Ftemp = ((maxthermo.readThermocoupleTemperature()*1.8)+32);
 
 }
 
-float getBatteryPercentage() {
 
-  return maxlipo.cellPercent();
-
-}
 
 void setLED(int r,int b, int g){
   pixels.setPixelColor(0, pixels.Color(r, g, b));
@@ -263,17 +258,7 @@ Serial.begin(115200);
   display.update();
 
   
-  //Wire.begin(I2C_SDA, I2C_SCL);
-
-  ///////////////LIPO//////////////////////
-if (!maxlipo.begin()) {
-    Serial.println(F("Couldnt find Adafruit MAX17048?\nMake sure a battery is plugged in!"));
-    while (1) delay(10);
-  }
-  Serial.print(F("Found MAX17048"));
-  Serial.print(F(" with Chip ID: 0x")); 
-  Serial.println(maxlipo.getChipID(), HEX);
-
+ 
 
 ///////////////WIFI MANAGER/////////////////////
 
@@ -357,7 +342,7 @@ delay(100);
     html += "<p>High Temperature: <input type='number' step='0.1' value='" + String(highTemp) + "' id='highTemp'></p>";
     html += "<p>Low Temperature: <input type='number' step='0.1' value='" + String(lowTemp) + "' id='lowTemp'></p>";
     html += "<p>Current Temperature: " + String(readTemperature()) + " &#8451;</p>";
-    html += "<p>Battery Percentage: " + String(getBatteryPercentage()) + "%</p>";
+   // html += "<p>Battery Percentage: " + String(getBatteryPercentage()) + "%</p>";
    // html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
     html += "<p>Variable Status: " + String(isVariableTrue ? "True" : "False") + "</p>";
     html += "<button onclick='updateSettings()'>Update Settings</button>";
@@ -421,15 +406,8 @@ delay(1000);
   
      // Send the updated pixel colors to the hardware.
 
-  Serial.print(F("Batt Voltage: ")); Serial.print(maxlipo.cellVoltage(), 3); Serial.println(" V");
-  Serial.print(F("Batt Percent: ")); Serial.print(maxlipo.cellPercent(), 1); Serial.println(" %");
 
 
-  int BV = maxlipo.cellPercent();
-
-
-  Serial.println(BV);
-  showPartialUpdateVOL(BV);
 
 
 
@@ -470,7 +448,7 @@ showPartialUpdate(Ftemp);
     
     Serial.print(maxthermo.readThermocoupleTemperature());
     Serial.print("C");Serial.print(Ftemp);Serial.println("F");
-    Serial.print(F("(Dis)Charge rate : ")); Serial.print(maxlipo.chargeRate(), 1); Serial.println(" %/hr");
+    
   }
 
 checkTemp(SThighTemp,STlowTemp,Ftemp);
