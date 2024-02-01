@@ -25,7 +25,7 @@
 #include <Preferences.h>
 //#include "functions.h"
 #include "bitmap.h"
-#include "pitches.h"
+
 
 
 
@@ -40,12 +40,12 @@ const long mini_interval = 1000;
 
 ///DEFINES///
 //NEOPIXEL
-#define PIN 0
+#define PIN 12
 #define NUMPIXELS 4
 
-///MAX1704X
-#define I2C_SDA 21
-#define I2C_SCL 22
+///Battery
+#define DIV 33
+
 
 ///MAX41856
 #define CSPin 25
@@ -248,9 +248,9 @@ Serial.begin(115200);
 
 */
 
-tone(NOTE_A1,1000);
-tone(NOTE_A3,1000);
-tone(NOTE_A7,1000);
+tone(1000,1000);
+tone(2000,1000);
+tone(3000,1000);
 
 
  
