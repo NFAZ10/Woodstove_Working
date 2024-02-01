@@ -52,6 +52,7 @@ const long mini_interval = 1000;
 #define DOPin 27
 #define CLKPin 14
 #define DRDY_PIN 32
+#define buzzer 19 
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 float highTemp = 25.0; // Default high temperature
@@ -72,9 +73,14 @@ Preferences q;
 float SThighTemp;
 float STlowTemp;
 
+unsigned long fwchecktime;
+unsigned long fwchecktimeprev;
+
+
+
 
 String FirmwareVer = {
-  "1.1"
+  "1.2"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -228,17 +234,23 @@ Serial.begin(115200);
   Serial.println("WoodStove...V2.0");
   display.init(); // enable diagnostic output on Serial
 
+  pinMode(buzzer,OUTPUT);
+
   pixels.begin();
-  
+ /*
+
   p.begin("test-1", true);
   q.begin("test-2", true);
 
   SThighTemp = p.getUInt("hightemp", 0);
   STlowTemp = q.getUInt("lowTemp", 0);
 
+*/
 
 
-
+  tone(buzzer,1000);
+  delay(1000);
+  noTone(buzzer);
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
@@ -399,7 +411,16 @@ delay(100);
 void loop() {
 
 
+fwchecktime=millis();
+
+//if ((fwchecktimeprev-fwchecktime)=>6000){
+
 if(FirmwareVersionCheck()){firmwareUpdate();}
+
+fwchecktimeprev=fwchecktime;
+
+
+
 
 delay(1000);
 //wm.process();
@@ -431,12 +452,10 @@ delay(1000);
   previousTemperature = temperature;
   temperature = maxthermo.readThermocoupleTemperature();
 
- // temperature++;
- // if(temperature==999){temperature=0;}
 
   Ftemp = ((temperature*1.8)+32);
    
-   Serial.print("TEMP:");Serial.println(Ftemp);
+Serial.print("TEMP:");Serial.println(Ftemp);
   // showPartialUpdate(Ftemp);
  Serial.print("High Temp: ");Serial.println(highTemp);
  Serial.print("Low Temp:  ");Serial.println(lowTemp);
@@ -447,10 +466,11 @@ showPartialUpdate(Ftemp);
 
 // Publish temperature to MQTT
     
-    Serial.print(maxthermo.readThermocoupleTemperature());
-    Serial.print("C  ");Serial.print(Ftemp);Serial.println("F");
+  Serial.print(maxthermo.readThermocoupleTemperature());
+  Serial.print("C  ");Serial.print(Ftemp);Serial.println("F");
     
   }
+  else{Serial.println("NO CHANGE IN TEMP");}
 
 checkTemp(SThighTemp,STlowTemp,Ftemp);
 
