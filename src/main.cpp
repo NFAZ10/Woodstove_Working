@@ -74,7 +74,7 @@ float STlowTemp;
 
 
 String FirmwareVer = {
-  "1.0"
+  "1.1"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -429,10 +429,10 @@ delay(1000);
   */
 
   previousTemperature = temperature;
-  //temperature = maxthermo.readThermocoupleTemperature();
+  temperature = maxthermo.readThermocoupleTemperature();
 
-  temperature++;
-  if(temperature==999){temperature=0;}
+ // temperature++;
+ // if(temperature==999){temperature=0;}
 
   Ftemp = ((temperature*1.8)+32);
    
@@ -448,7 +448,7 @@ showPartialUpdate(Ftemp);
 // Publish temperature to MQTT
     
     Serial.print(maxthermo.readThermocoupleTemperature());
-    Serial.print("C");Serial.print(Ftemp);Serial.println("F");
+    Serial.print("C  ");Serial.print(Ftemp);Serial.println("F");
     
   }
 
