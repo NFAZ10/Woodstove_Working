@@ -74,7 +74,7 @@ float STlowTemp;
 
 
 String FirmwareVer = {
-  "1.3"
+  "1.0"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -419,14 +419,15 @@ delay(1000);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   int count = 0;
-
+/*
   while (digitalRead(DRDY_PIN)) {
     if (count++ > 200) {
       count = 0;
       Serial.print(".");
     }
   }
-  
+  */
+
   previousTemperature = temperature;
   //temperature = maxthermo.readThermocoupleTemperature();
 
