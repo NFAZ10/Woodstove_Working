@@ -25,6 +25,7 @@
 #include <Preferences.h>
 //#include "functions.h"
 #include "bitmap.h"
+#include "pitches.h"
 
 
 
@@ -80,7 +81,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "1.2"
+  "1.3"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
@@ -247,10 +248,12 @@ Serial.begin(115200);
 
 */
 
+tone(NOTE_A1,1000);
+tone(NOTE_A3,1000);
+tone(NOTE_A7,1000);
 
-  tone(buzzer,1000);
-  delay(1000);
-  noTone(buzzer);
+
+ 
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
