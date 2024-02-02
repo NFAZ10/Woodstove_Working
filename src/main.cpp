@@ -84,8 +84,13 @@ String FirmwareVer = {
   "0.5"
 };
 
+//#define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
+//#define URL_fw_Bin "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/.pio/build/esp32dev/firmware.bin"
+
 #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
 #define URL_fw_Bin "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/.pio/build/esp32dev/firmware.bin"
+
+
 //DigiCert root certificate has expiry date of 10 Nov 2031
 const char * rootCACertificate = \
 "-----BEGIN CERTIFICATE-----\n" \
