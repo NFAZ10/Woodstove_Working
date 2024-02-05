@@ -194,7 +194,7 @@ void setup()
 {
 
   Serial.begin(115200);
-  Serial.println("WoodStove...V2.0");
+  Serial.println("WoodStove...V"+FirmwareVer);
   display.init(); // enable diagnostic output on Serial
 
   pinMode(buzzer, OUTPUT);
