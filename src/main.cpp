@@ -35,7 +35,7 @@ const long mini_interval = 1000;
 
 /// DEFINES///
 // NEOPIXEL
-#define PIN 12
+#define PIN 13
 #define NUMPIXELS 4
 
 /// Battery
@@ -72,7 +72,7 @@ unsigned long fwchecktime;
 unsigned long fwchecktimeprev;
 
 String FirmwareVer = {
-    "0.6"};
+    "0.7"};
 
 // #define URL_fw_Version "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/src/fw.txt"
 // #define URL_fw_Bin "https://raw.githubusercontent.com/NFAZ10/Woodstove_Working/main/.pio/build/esp32dev/firmware.bin"
@@ -363,13 +363,13 @@ void loop()
 
   fwchecktime = millis();
 
-  // if ((fwchecktimeprev-fwchecktime)=>6000){
+   if ((fwchecktimeprev-fwchecktime)>=6000){
 
   if (FirmwareVersionCheck())
   {
     firmwareUpdate();
   }
-
+}
   fwchecktimeprev = fwchecktime;
 
   delay(1000);
