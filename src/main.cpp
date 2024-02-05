@@ -23,7 +23,6 @@
 #include <ESPAsyncWebServer.h>
 #include <WiFiClientSecure.h>
 #include <Preferences.h>
-// #include "functions.h"
 #include "bitmap.h"
 
 RTC_DATA_ATTR bool isVariableTrue = true; // Initial value
