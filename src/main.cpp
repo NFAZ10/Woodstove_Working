@@ -39,6 +39,11 @@ const long mini_interval = 1000;
 
 /// Battery
 #define DIV 33
+float vout = 0.0;
+float vin = 0.0;
+float R1 = 10000.0; // resistance of R1 (100K) -see text!
+float R2 = 3300.0; // resistance of R2 (10K) - see text!
+int value = 0;
 
 /// MAX41856
 #define CSPin 25
@@ -46,7 +51,15 @@ const long mini_interval = 1000;
 #define DOPin 27
 #define CLKPin 14
 #define DRDY_PIN 32
+
+///Buzzer
 #define buzzer 19
+
+//Swithes
+#define SwA 2
+#define SwB 15
+#define SwC 8
+#define SwD 7
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 float highTemp = 25.0; // Default high temperature
@@ -190,6 +203,11 @@ void showPartialUpdateVOL(int BV)
 
 AsyncWebServer server(80);
 
+
+
+
+
+
 void setup()
 {
 
@@ -198,6 +216,9 @@ void setup()
   display.init(); // enable diagnostic output on Serial
 
   pinMode(buzzer, OUTPUT);
+  pinMode(DIV, INPUT); //It is necessary to declare the input pin
+  
+
 
   pixels.begin();
   /*
@@ -307,7 +328,7 @@ void setup()
     html += "<p>High Temperature: <input type='number' step='0.1' value='" + String(highTemp) + "' id='highTemp'></p>";
     html += "<p>Low Temperature: <input type='number' step='0.1' value='" + String(lowTemp) + "' id='lowTemp'></p>";
     html += "<p>Current Temperature: " + String(readTemperature()) + " &#8451;</p>";
-   // html += "<p>Battery Percentage: " + String(getBatteryPercentage()) + "%</p>";
+    html += "<p>Battery Percentage: " + String(vin) + "%</p>";
    // html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
     html += "<p>Variable Status: " + String(isVariableTrue ? "True" : "False") + "</p>";
     html += "<button onclick='updateSettings()'>Update Settings</button>";
@@ -359,6 +380,13 @@ void setup()
 
 void loop()
 {
+
+   value = analogRead(DIV);
+   vout = (value * 3.3) / 1024.0; // see text
+   vin = vout / (R2/(R1+R2)); 
+   if (vin<0.09) {
+   vin=0.0;//statement to quash undesired reading !
+   }
 
   fwchecktime = millis();
 
