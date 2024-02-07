@@ -85,7 +85,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.3"
+  "0.5"
 };
 
 
@@ -268,7 +268,7 @@ void setup()
   wm.setConfigPortalTimeout(120);
   // automatically connect using saved credentials if they exist
   // If connection fails it starts an access point with the specified name
-  if (wm.autoConnect("Woodstogesetup"))
+  if (wm.autoConnect("WoodStoveSetup"))
   {
     Serial.println("connected...yeey :)");
   }
