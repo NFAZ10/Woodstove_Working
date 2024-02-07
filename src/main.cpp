@@ -34,7 +34,7 @@ const long mini_interval = 1000;
 
 /// DEFINES///
 // NEOPIXEL
-#define PIN 13
+#define PIN 16
 #define NUMPIXELS 4
 
 /// Battery
