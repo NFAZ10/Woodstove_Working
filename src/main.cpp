@@ -34,7 +34,7 @@ const long mini_interval = 1000;
 
 /// DEFINES///
 // NEOPIXEL
-#define PIN 16
+#define PIN 13
 #define NUMPIXELS 4
 
 /// Battery
@@ -232,9 +232,6 @@ void setup()
 
  */
 
-  tone(1000, 1000);
-  tone(2000, 1000);
-  tone(3000, 1000);
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
