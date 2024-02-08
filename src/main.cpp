@@ -232,9 +232,9 @@ void setup()
 
  */
 
-  tone(buzzer,1000, 1000);
-  tone(buzzer,2000, 1000);
-  tone(buzzer,3000, 1000);
+  //tone(buzzer,1000, 1000);
+  //tone(buzzer,2000, 1000);
+  //tone(buzzer,3000, 1000);
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
@@ -323,6 +323,7 @@ void setup()
 
   display.fillScreen(GxEPD_WHITE);
   display.update();
+  
 
   delay(100);
   // Serve web page
