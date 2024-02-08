@@ -217,7 +217,7 @@ void setup()
   display.init(); // enable diagnostic output on Serial
 
   pinMode(buzzer, OUTPUT);
-  pinMode(DIV, INPUT); //It is necessary to declare the input pin
+
   pinMode(DRDY_PIN, INPUT);
   pinMode(SwA,INPUT_PULLUP);
   pinMode(SwB,INPUT_PULLUP);
