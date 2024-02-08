@@ -61,7 +61,7 @@ int value = 0;
 #define SwC 8
 #define SwD 7
 
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_BRG + NEO_KHZ800);
 float highTemp = 25.0; // Default high temperature
 float lowTemp = 20.0;  // Default low temperature
 
@@ -85,7 +85,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.6"
+  "0.7"
 };
 
 
