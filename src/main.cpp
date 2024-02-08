@@ -218,6 +218,12 @@ void setup()
 
   pinMode(buzzer, OUTPUT);
   pinMode(DIV, INPUT); //It is necessary to declare the input pin
+  pinMode(DRDY_PIN, INPUT);
+  pinMode(SwA,INPUT_PULLUP);
+  pinMode(SwB,INPUT_PULLUP);
+  pinMode(SwC,INPUT_PULLUP);
+  pinMode(SwD,INPUT_PULLUP);
+
   
 
 
@@ -298,12 +304,6 @@ void setup()
   boolean METRIC = false;
 
   Serial.println("MAX31856 thermocouple test");
-
-  pinMode(DRDY_PIN, INPUT);
-  pinMode(SwA,INPUT_PULLUP);
-  pinMode(SwB,INPUT_PULLUP);
-  pinMode(SwC,INPUT_PULLUP);
-  pinMode(SwD,INPUT_PULLUP);
 
   if (!maxthermo.begin())
   {
