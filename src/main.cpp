@@ -34,7 +34,7 @@ const long mini_interval = 1000;
 
 /// DEFINES///
 // NEOPIXEL
-#define PIN 13
+#define PIN 12
 #define NUMPIXELS 4
 
 /// Battery
@@ -85,7 +85,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.5"
+  "0.6"
 };
 
 
