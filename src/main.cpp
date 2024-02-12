@@ -238,9 +238,7 @@ void setup()
 
  */
 
-  tone(buzzer,1000, 200);
-  tone(buzzer,2000, 500);
-  tone(buzzer,3000, 200);
+  
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
