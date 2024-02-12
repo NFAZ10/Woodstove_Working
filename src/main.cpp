@@ -219,10 +219,10 @@ void setup()
   pinMode(buzzer, OUTPUT);
 
   pinMode(DRDY_PIN, INPUT);
-  pinMode(SwA,INPUT_PULLUP);
-  pinMode(SwB,INPUT_PULLUP);
-  pinMode(SwC,INPUT_PULLUP);
-  pinMode(SwD,INPUT_PULLUP);
+
+  pinMode(SwB,INPUT);
+
+  pinMode(SwD,INPUT);
 
   
 
@@ -238,9 +238,9 @@ void setup()
 
  */
 
-  //tone(buzzer,1000, 1000);
-  //tone(buzzer,2000, 1000);
-  //tone(buzzer,3000, 1000);
+  tone(buzzer,1000, 200);
+  tone(buzzer,2000, 500);
+  tone(buzzer,3000, 200);
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold12pt7b);
