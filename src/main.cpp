@@ -81,7 +81,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.8"
+  "0.1"
 };
 
 
@@ -231,7 +231,7 @@ void setup()
 
  
 
-  if(vin<4)
+  if(vin<3.4)
   {
     tone(buzzer,500,3000);
 
