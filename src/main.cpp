@@ -58,8 +58,8 @@ const long mini_interval = 1000;
 #define SwD 7
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_BRG + NEO_KHZ800);
-float highTemp = 25.0; // Default high temperature
-float lowTemp = 20.0;  // Default low temperature
+float highTemp = 100; // Default high temperature
+float lowTemp = 50;  // Default low temperature
 
 int Ftemp = 001;
 int wifitimer = 0;
@@ -84,7 +84,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.2.2"
+  "0.2.3"
 };
 
 
@@ -152,7 +152,7 @@ void checkTemp(int high, int low, int temp)
   if (high >= temp)
   {
     Serial.println("TEMP OVER LIMIT!!!");
-    tone(buzzer,5000,10000);
+    tone(buzzer,5000,1000);
     setLED(255, 0, 0);
   }
   if (low <= temp)
