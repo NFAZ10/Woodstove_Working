@@ -81,7 +81,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.7"
+  "0.8"
 };
 
 
@@ -234,7 +234,8 @@ void setup()
   if(vin<4)
   {
     tone(buzzer,500,3000);
- delay(5000);
+
+    ESP.deepSleep(0);
   }
  else{
   tone(buzzer,1000,500);
