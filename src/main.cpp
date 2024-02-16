@@ -71,6 +71,8 @@ float previousTemperature = -100.0;
 float stovetemp;
 float temperature = 0;
 
+bool lowpower = false;
+
 Preferences p;
 Preferences q;
 
@@ -82,7 +84,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.2"
+  "0.2.1"
 };
 
 
@@ -135,11 +137,13 @@ float readTemperature()
 
 void setLED(int r, int b, int g)
 {
+ 
   pixels.setPixelColor(0, pixels.Color(r, g, b));
   pixels.setPixelColor(1, pixels.Color(r, g, b));
   pixels.setPixelColor(2, pixels.Color(r, g, b));
   pixels.setPixelColor(3, pixels.Color(r, g, b));
   pixels.show();
+
 }
 
 void checkTemp(int high, int low, int temp)
@@ -148,6 +152,7 @@ void checkTemp(int high, int low, int temp)
   if (high >= temp)
   {
     Serial.println("TEMP OVER LIMIT!!!");
+    tone(buzzer,5000,10000);
     setLED(255, 0, 0);
   }
   if (low <= temp)
@@ -213,6 +218,9 @@ float checkBattery(){
    Serial.print("Voltage: ");
    Serial.println(vin);
    return vin;
+
+   if (vin<3.9){lowpower=true;}
+   else{lowpower=false;}
 }
 
 AsyncWebServer server(80);
@@ -238,7 +246,14 @@ void setup()
 
     ESP.deepSleep(0);
   }
+ else if(vin>=3.4&&vin<+3.99){
+
+lowpower = true;
+
+ }
  else{
+lowpower = false;
+
   tone(buzzer,1000,500);
  /*
 
@@ -282,7 +297,7 @@ void setup()
   display.update();
 
   ///////////////WIFI MANAGER/////////////////////
-
+if (lowpower==false){
   WiFiManager wm;
   // wiFiManager.autoConnect("CustomAP");
 
@@ -305,6 +320,7 @@ void setup()
     Serial.println("Configportal running");
     // showPartialUpdateWIFIFAIL();
   }
+ }
 
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
@@ -413,6 +429,8 @@ void loop()
 {
 checkBattery();
 
+if (lowpower==true){pixels.setBrightness(10);}
+else {pixels.setBrightness(255);}
 
   fwchecktime = millis();
 
