@@ -200,10 +200,10 @@ void showPartialUpdateVOL(int BV)
 
 float checkBattery(){
 
-  int value = analogRead(DIV);
+  float value = analogRead(DIV);
    Serial.print("Raw: ");
    Serial.println(value);
-   int vout = map(value,0,1290,0,4200);
+   float vout = map(value,0,1290,0,4200);
    Serial.print("Mapped Raw: ");
    Serial.println(vout);
    vout = map(vout,0,3890,0,4200);
