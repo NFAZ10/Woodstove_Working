@@ -224,10 +224,10 @@ void setup()
   Serial.begin(115200);
   Serial.println("WoodStove...V"+FirmwareVer);
   
-/*
-  pinMode(buzzer, OUTPUT);
 
-  pinMode(DRDY_PIN, INPUT);
+  pinMode(buzzer, OUTPUT);
+  tone(buzzer,1000,1000);
+ /*
 
   pinMode(SwB,INPUT);
 
@@ -243,8 +243,7 @@ void setup()
   /*
 
    p.begin("test-1", true);
-   q.begin("test-2", true);
-
+   q.begin("test-2", true
    SThighTemp = p.getUInt("hightemp", 0);
    STlowTemp = q.getUInt("lowTemp", 0);
 
