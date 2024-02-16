@@ -223,7 +223,7 @@ void setup()
 
   Serial.begin(115200);
   Serial.println("WoodStove...V"+FirmwareVer);
-  display.init(); // enable diagnostic output on Serial
+  
 
   pinMode(buzzer, OUTPUT);
 
@@ -233,10 +233,12 @@ void setup()
 
   pinMode(SwD,INPUT);
 
-  
+    Serial.println("pins set");
 
 
   pixels.begin();
+
+      Serial.println("Pixels Started");
   /*
 
    p.begin("test-1", true);
