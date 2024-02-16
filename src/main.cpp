@@ -39,11 +39,7 @@ const long mini_interval = 1000;
 
 /// Battery
 #define DIV 33
-float vout = 0.0;
-float vin = 0.0;
-float R1 = 10000.0; // resistance of R1 (100K) -see text!
-float R2 = 3300.0; // resistance of R2 (10K) - see text!
-int value = 0;
+
 
 /// MAX41856
 #define CSPin 25
@@ -202,10 +198,23 @@ void showPartialUpdateVOL(int BV)
   delay(2000);
 }
 
+void checkBattery(){
+
+  int value = analogRead(DIV);
+   Serial.print("Raw: ");
+   Serial.println(value);
+   int vout = map(value,0,1290,0,4200);
+   Serial.print("Mapped Raw: ");
+   Serial.println(vout);
+   vout = map(vout,0,3890,0,4200);
+   vout = (vout/1000);
+   float vin = vout ;
+   Serial.print("Voltage: ");
+   Serial.println(vin);
+
+}
+
 AsyncWebServer server(80);
-
-
-
 
 
 
@@ -332,7 +341,7 @@ void setup()
     html += "<p>High Temperature: <input type='number' step='0.1' value='" + String(highTemp) + "' id='highTemp'></p>";
     html += "<p>Low Temperature: <input type='number' step='0.1' value='" + String(lowTemp) + "' id='lowTemp'></p>";
     html += "<p>Current Temperature: " + String(readTemperature()) + " &#8451;</p>";
-    html += "<p>Battery Percentage: " + String(vin) + "%</p>";
+   //html += "<p>Battery Percentage: " + String(vin) + "%</p>";
    // html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
     html += "<p>Variable Status: " + String(isVariableTrue ? "True" : "False") + "</p>";
     html += "<button onclick='updateSettings()'>Update Settings</button>";
@@ -384,13 +393,8 @@ void setup()
 
 void loop()
 {
+checkBattery();
 
-   value = analogRead(DIV);
-   vout = (value * 3.3) / 1024.0; // see text
-   vin = vout / (R2/(R1+R2)); 
-   if (vin<0.09) {
-   vin=0.0;//statement to quash undesired reading !
-   }
 
   fwchecktime = millis();
 
