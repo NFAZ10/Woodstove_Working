@@ -198,7 +198,7 @@ void showPartialUpdateVOL(int BV)
   delay(2000);
 }
 
-void checkBattery(){
+float checkBattery(){
 
   int value = analogRead(DIV);
    Serial.print("Raw: ");
@@ -211,7 +211,7 @@ void checkBattery(){
    float vin = vout ;
    Serial.print("Voltage: ");
    Serial.println(vin);
-
+   return vin;
 }
 
 AsyncWebServer server(80);
@@ -227,6 +227,17 @@ void setup()
 
   pinMode(buzzer, OUTPUT);
   tone(buzzer,1000,1000);
+  float vin = checkBattery();
+
+ 
+
+  if(vin<4)
+  {
+    tone(buzzer,500,3000);
+ delay(5000);
+  }
+ else{
+  tone(buzzer,1000,500);
  /*
 
   pinMode(SwB,INPUT);
@@ -391,6 +402,9 @@ void setup()
   // server.serveStatic("/image.jpg", U_SPIFFS, "/image.jpg"); // Replace 'image.jpg' with your image file
 
   server.begin();
+ 
+
+ }
 }
 
 void loop()
