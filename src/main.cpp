@@ -152,6 +152,8 @@ Serial.print("Temp");
 Serial.println(temp);
 
   if (high > temp)
+
+  
   {
     Serial.println("TEMP OVER LIMIT!!!");
     
