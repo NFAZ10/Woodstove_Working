@@ -84,7 +84,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.2.1"
+  "0.2.2"
 };
 
 
@@ -492,17 +492,9 @@ else {pixels.setBrightness(255);}
     Serial.println("NO CHANGE IN TEMP");
   }
 
-  checkTemp(SThighTemp, STlowTemp, Ftemp);
+  checkTemp(highTemp, lowTemp, Ftemp);
 
-  if (highTemp != SThighTemp)
-  {
 
-    p.putUInt("highTemp", highTemp);
-    q.putUInt("lowTemp", lowTemp);
-
-    p.end();
-    q.end();
-  }
 }
 
 void firmwareUpdate(void)
