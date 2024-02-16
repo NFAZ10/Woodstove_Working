@@ -224,7 +224,7 @@ void setup()
   Serial.begin(115200);
   Serial.println("WoodStove...V"+FirmwareVer);
   
-
+/*
   pinMode(buzzer, OUTPUT);
 
   pinMode(DRDY_PIN, INPUT);
@@ -232,8 +232,9 @@ void setup()
   pinMode(SwB,INPUT);
 
   pinMode(SwD,INPUT);
+  */
 
-    Serial.println("pins set");
+  Serial.println("pins set");
 
 
   pixels.begin();
