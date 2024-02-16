@@ -65,6 +65,7 @@ int Ftemp = 001;
 int wifitimer = 0;
 int mqtttimer = 0;
 float BatteryV = 100;
+float vin = 5 ;
 
 float previousTemperature = -100.0;
 float stovetemp;
@@ -81,7 +82,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-  "0.1"
+  "0.2"
 };
 
 
@@ -227,7 +228,7 @@ void setup()
 
   pinMode(buzzer, OUTPUT);
   tone(buzzer,1000,1000);
-  float vin = checkBattery();
+  vin = checkBattery();
 
  
 
@@ -355,7 +356,7 @@ void setup()
     html += "<p>High Temperature: <input type='number' step='0.1' value='" + String(highTemp) + "' id='highTemp'></p>";
     html += "<p>Low Temperature: <input type='number' step='0.1' value='" + String(lowTemp) + "' id='lowTemp'></p>";
     html += "<p>Current Temperature: " + String(readTemperature()) + " &#8451;</p>";
-   //html += "<p>Battery Percentage: " + String(vin) + "%</p>";
+    html += "<p>Battery Percentage: " + String(vin) + "%</p>";
    // html += "<img src='/image.jpg' width='300' height='200'>"; // Replace 'image.jpg' with your image file
     html += "<p>Variable Status: " + String(isVariableTrue ? "True" : "False") + "</p>";
     html += "<button onclick='updateSettings()'>Update Settings</button>";
