@@ -58,6 +58,8 @@ const long mini_interval = 1000;
 #define SwC 8
 #define SwD 7
 
+String woodstove = "Woodstove";
+
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_BRG + NEO_KHZ800);
 float highTemp = 700; // Default high temperature
 float lowTemp = 200;  // Default low temperature
@@ -85,7 +87,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.4"
+"0.3.5"
 };
 
 
@@ -313,7 +315,7 @@ lowpower = false;
 if (lowpower==false){
   WiFiManager wm;
   // wiFiManager.autoConnect("CustomAP");
-
+  WiFi.setHostname(woodstove.c_str());
   WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   Serial.println("WIFI ENABLED");
   // showPartialUpdateWIFION();
@@ -329,7 +331,9 @@ if (lowpower==false){
     Serial.println("connected...yeey :)");
     tone(buzzer,500,500);
     tone(buzzer,750,500);
-    tone(buzzer,1000,1000);
+    tone(buzzer,1000
+    
+    ,1000);
   }
   else
   {
