@@ -84,7 +84,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.2.6"
+"0.2.7"
 };
 
 
@@ -143,6 +143,7 @@ void setLED(int r, int b, int g)
   pixels.setPixelColor(2, pixels.Color(r, g, b));
   pixels.setPixelColor(3, pixels.Color(r, g, b));
   pixels.show();
+  Serial.print("Pixels Updated");
 
 }
 
@@ -150,17 +151,18 @@ void checkTemp(float high, float low, float temp)
 {
 Serial.print("Temp");
 Serial.println(temp);
-
-  if (high > temp)
-
-  
+Serial.print("High");
+Serial.println(high);
+Serial.print("low");
+Serial.println(low);
+  if (high>temp)
   {
     Serial.println("TEMP OVER LIMIT!!!");
     
     //tone(buzzer,5000,1000);
     setLED(255, 0, 0);
   }
-  else if (low < temp)
+  else if (low<temp)
   {
     Serial.println("ADD WOOD OR OPEN AIR");
     setLED(0, 0, 255);
