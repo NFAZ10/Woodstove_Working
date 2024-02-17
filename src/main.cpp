@@ -85,7 +85,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.2"
+"0.3.3"
 };
 
 
@@ -158,7 +158,7 @@ void checkTemp(float high, float low, float temp)
     tone(buzzer,5000,1000);
     setLED(255, 0, 0);
   }
-  else if (low>temp)
+  else if (low>temp&&temp>120)
   {
     Serial.println("ADD WOOD OR OPEN AIR");
     setLED(0, 0, 125);
