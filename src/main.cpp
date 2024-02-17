@@ -24,6 +24,7 @@
 #include <WiFiClientSecure.h>
 #include <Preferences.h>
 #include "bitmap.h"
+//#include <FlashStorage_STM32.h>
 
 RTC_DATA_ATTR bool isVariableTrue = true; // Initial value
 
@@ -84,7 +85,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.2.9"
+"0.3.1"
 };
 
 
@@ -154,7 +155,7 @@ void checkTemp(float high, float low, float temp)
   {
     Serial.println("TEMP OVER LIMIT!!!");
     
-    //tone(buzzer,5000,1000);
+    tone(buzzer,5000,1000);
     setLED(255, 0, 0);
   }
   else if (low>temp)
@@ -162,8 +163,14 @@ void checkTemp(float high, float low, float temp)
     Serial.println("ADD WOOD OR OPEN AIR");
     setLED(0, 0, 125);
   }
+  else if(temp>low&&temp<high)
+  {
+
+   setLED(0,50,0);
+
+  }
   else{
-   setLED(0,125,0);
+   setLED(0,0,0);
 
   }
 }
