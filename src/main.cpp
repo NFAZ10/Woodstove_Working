@@ -85,7 +85,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.3"
+"0.3.4"
 };
 
 
@@ -327,11 +327,17 @@ if (lowpower==false){
   if (wm.autoConnect("WoodStoveSetup"))
   {
     Serial.println("connected...yeey :)");
+    tone(buzzer,500,500);
+    tone(buzzer,750,500);
+    tone(buzzer,1000,1000);
   }
   else
   {
     Serial.println("Configportal running");
     // showPartialUpdateWIFIFAIL();
+    tone(buzzer,1200,500);
+    tone(buzzer,1000,500);
+    tone(buzzer,500,1000);
   }
  }
 
