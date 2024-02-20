@@ -89,7 +89,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.2"
+"0.3.6.3"
 };
 
 
@@ -468,8 +468,10 @@ else {pixels.setBrightness(255);}
 
  
 }
-timeTrack=timeTrack++;
-  Serial.println("Time: "+timeTrack);
+timeTrack=(timeTrack+1);
+
+  Serial.println("Time: ");
+  Serial.println(timeTrack);
  
 
   previousTemperature = temperature;
