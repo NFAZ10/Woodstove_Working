@@ -87,7 +87,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.5"
+"0.3.6"
 };
 
 
@@ -463,13 +463,11 @@ else {pixels.setBrightness(255);}
   {
     firmwareUpdate();
   }
-}
   fwchecktimeprev = fwchecktime;
+}
+  
 
-  delay(1000);
-  // wm.process();
-
-  // Send the updated pixel colors to the hardware.
+ 
 
   previousTemperature = temperature;
   delay(1000);
