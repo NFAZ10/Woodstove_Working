@@ -58,6 +58,8 @@ const long mini_interval = 1000;
 #define SwC 8
 #define SwD 7
 
+int timeTrack;
+
 String woodstove = "Woodstove";
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_BRG + NEO_KHZ800);
@@ -87,7 +89,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.1"
+"0.3.6.2"
 };
 
 
@@ -455,20 +457,19 @@ checkBattery();
 if (lowpower==true){pixels.setBrightness(10);}
 else {pixels.setBrightness(255);}
 
-  fwchecktime = millis();
 
-   if ((fwchecktimeprev-fwchecktime)>6000){
+   if (timeTrack>60){
 
   if (FirmwareVersionCheck())
   {
     firmwareUpdate();
   }
-  fwchecktimeprev = fwchecktime;
-  Serial.println("Current: "+fwchecktime);
-  Serial.println("Prev: "+fwchecktimeprev);
-}
-  
+  timeTrack = 0;
 
+ 
+}
+timeTrack=timeTrack++;
+  Serial.println("Time: "+timeTrack);
  
 
   previousTemperature = temperature;
