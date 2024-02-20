@@ -87,7 +87,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6"
+"0.3.6.1"
 };
 
 
@@ -457,13 +457,15 @@ else {pixels.setBrightness(255);}
 
   fwchecktime = millis();
 
-   if ((fwchecktimeprev-fwchecktime)>=6000){
+   if ((fwchecktimeprev-fwchecktime)>6000){
 
   if (FirmwareVersionCheck())
   {
     firmwareUpdate();
   }
   fwchecktimeprev = fwchecktime;
+  Serial.println("Current: "+fwchecktime);
+  Serial.println("Prev: "+fwchecktimeprev);
 }
   
 
