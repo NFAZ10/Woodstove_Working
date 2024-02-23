@@ -261,6 +261,8 @@ void theaterChaseRainbow(int wait) {
   }
 }
 
+
+
 AsyncWebServer server(80);
 
 
@@ -481,7 +483,7 @@ if (lowpower==true){pixels.setBrightness(10);}
 else {pixels.setBrightness(255);}
 
 
-   if (timeTrack>60){
+   if (timeTrack>5){
 
   if (FirmwareVersionCheck())
   {
