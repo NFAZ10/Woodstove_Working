@@ -240,6 +240,27 @@ float checkBattery(){
    else{lowpower=false;}
 }
 
+void theaterChaseRainbow(int wait) {
+  int firstPixelHue = 0;     // First pixel starts at red (hue 0)
+  for(int a=0; a<30; a++) {  // Repeat 30 times...
+    for(int b=0; b<3; b++) { //  'b' counts from 0 to 2...
+      pixels.clear();         //   Set all pixels in RAM to 0 (off)
+      // 'c' counts up from 'b' to end of strip in increments of 3...
+      for(int c=b; c<pixels.numPixels(); c += 3) {
+        // hue of pixel 'c' is offset by an amount to make one full
+        // revolution of the color wheel (range 65536) along the length
+        // of the strip (strip.numPixels() steps):
+        int      hue   = firstPixelHue + c * 65536L / pixels.numPixels();
+        uint32_t color = pixels.gamma32(pixels.ColorHSV(hue)); // hue -> RGB
+        pixels.setPixelColor(c, color); // Set pixel 'c' to value 'color'
+      }
+      pixels.show();                // Update strip with new contents
+      delay(wait);                 // Pause for a moment
+      firstPixelHue += 65536 / 90; // One cycle of color wheel over 90 frames
+    }
+  }
+}
+
 AsyncWebServer server(80);
 
 
@@ -285,6 +306,8 @@ lowpower = false;
   pixels.begin();
 
       Serial.println("Pixels Started");
+      theaterChaseRainbow(50);
+      delay(2000);
   /*
 
    p.begin("test-1", true);
