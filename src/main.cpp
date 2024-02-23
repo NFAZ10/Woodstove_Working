@@ -91,7 +91,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.5"
+"0.3.6.6"
 };
 
 
@@ -282,11 +282,11 @@ void setup()
 
  
 
-  if(vin<3.4)
+  if(vin<=3.2)
   {
     tone(buzzer,500,3000);
 
-    ESP.deepSleep(0);
+   // ESP.deepSleep(0);
   }
  else if(vin>=3.4&&vin<+3.99){
 
@@ -312,8 +312,8 @@ restartflag=0;
   pixels.begin();
 
       Serial.println("Pixels Started");
-      theaterChaseRainbow(500);
-      delay(2000);
+      theaterChaseRainbow(100);
+      delay(100);
       pixels.show();
 
 
