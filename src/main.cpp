@@ -58,6 +58,8 @@ const long mini_interval = 1000;
 #define SwC 8
 #define SwD 7
 
+int restartflag = 0;
+
 int timeTrack;
 
 String woodstove = "Woodstove";
@@ -289,10 +291,12 @@ void setup()
  else if(vin>=3.4&&vin<+3.99){
 
 lowpower = true;
+restartflag=1;
 
  }
  else{
 lowpower = false;
+restartflag=0;
 
   tone(buzzer,1000,500);
  /*
@@ -482,6 +486,12 @@ checkBattery();
 if (lowpower==true){pixels.setBrightness(10);}
 else {pixels.setBrightness(255);}
 
+if (lowpower==true&&restartflag==1){ESP.restart();}
+
+while (WiFi.status() != WL_CONNECTED) {
+
+
+  }
 
    if (timeTrack>5){
 
