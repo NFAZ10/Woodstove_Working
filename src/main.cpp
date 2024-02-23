@@ -91,7 +91,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.4"
+"0.3.6.5"
 };
 
 
@@ -274,7 +274,7 @@ void setup()
 
   Serial.begin(115200);
   Serial.println("WoodStove...V"+FirmwareVer);
-  
+  display.init();
 
   pinMode(buzzer, OUTPUT);
   tone(buzzer,1000,1000);
