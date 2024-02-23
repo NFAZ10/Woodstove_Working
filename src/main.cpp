@@ -91,7 +91,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.3"
+"0.3.6.4"
 };
 
 
@@ -312,16 +312,10 @@ restartflag=0;
   pixels.begin();
 
       Serial.println("Pixels Started");
-      theaterChaseRainbow(50);
+      theaterChaseRainbow(500);
       delay(2000);
-  /*
+      pixels.show();
 
-   p.begin("test-1", true);
-   q.begin("test-2", true
-   SThighTemp = p.getUInt("hightemp", 0);
-   STlowTemp = q.getUInt("lowTemp", 0);
-
- */
 
   
 
@@ -483,8 +477,14 @@ void loop()
 {
 checkBattery();
 
-if (lowpower==true){pixels.setBrightness(10);}
-else {pixels.setBrightness(255);}
+if (lowpower==true){
+  pixels.setBrightness(10);
+  pixels.setPixelColor(0,255,0,0);
+  }
+else {
+  pixels.setBrightness(255);
+  pixels.show();
+}
 
 if (lowpower==true&&restartflag==1){ESP.restart();}
 
@@ -500,6 +500,8 @@ while (WiFi.status() != WL_CONNECTED) {
     firmwareUpdate();
   }
   timeTrack = 0;
+
+
 
  
 }
