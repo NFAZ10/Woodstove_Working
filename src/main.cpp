@@ -282,7 +282,7 @@ void setup()
 
  
 
-  if(vin<=3.2)
+  if(vin=3.2)
   {
     tone(buzzer,500,3000);
 
