@@ -91,7 +91,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.6"
+"0.3.6.7"
 };
 
 
