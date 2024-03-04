@@ -91,7 +91,7 @@ unsigned long fwchecktimeprev;
 
 
 String FirmwareVer = {
-"0.3.6.7"
+"0.3.6.8"
 };
 
 
@@ -278,25 +278,6 @@ void setup()
 
   pinMode(buzzer, OUTPUT);
   tone(buzzer,1000,1000);
-  vin = checkBattery();
-
- 
-
-  if(vin=3.2)
-  {
-    tone(buzzer,500,3000);
-
-   // ESP.deepSleep(0);
-  }
- else if(vin>=3.4&&vin<+3.99){
-
-lowpower = true;
-restartflag=1;
-
- }
- else{
-lowpower = false;
-restartflag=0;
 
   tone(buzzer,1000,500);
  /*
@@ -464,14 +445,36 @@ if (lowpower==false){
     ESP.restart(); // Reboot the ESP32
     request->send(200, "text/plain", "WiFiManager Reset and ESP32 Restarted"); });
 
-  // Serve image file
-  // server.serveStatic("/image.jpg", U_SPIFFS, "/image.jpg"); // Replace 'image.jpg' with your image file
 
   server.begin();
  
 
+ 
+
+   vin = checkBattery();
+
+ /*
+
+  if(vin=3.2)
+  {
+    tone(buzzer,500,3000);
+
+   // ESP.deepSleep(0);
+  }
+ else if(vin>=3.4&&vin<+3.99){
+
+lowpower = true;
+restartflag=1;
+
  }
+ else{
+lowpower = false;
+restartflag=0;
+
 }
+*/
+}
+
 
 void loop()
 {
